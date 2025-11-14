@@ -31,6 +31,28 @@
   --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+/* Light Mode Color Palette */
+body.light-mode {
+  --color-bg-dark: #ffffff;
+  --color-bg-card: #f8f9fa;
+  --color-bg-card-hover: #e9ecef;
+  --color-border: #dee2e6;
+  --color-border-light: #ced4da;
+
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #495057;
+  --color-text-muted: #6c757d;
+
+  --color-accent: #1a1a1a;
+  --color-accent-dim: #495057;
+
+  /* Shadows for light mode */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -155,6 +177,14 @@ section {
   border-bottom-color: var(--color-border-light);
 }
 
+body.light-mode .header {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+body.light-mode .header.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -203,6 +233,56 @@ section {
   color: var(--color-text-primary);
   background: var(--color-bg-card-hover);
   border: 1px solid var(--color-border);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-toggle {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.theme-toggle:hover {
+  background: var(--color-bg-card-hover);
+  border-color: var(--color-border-light);
+}
+
+.theme-toggle svg {
+  position: absolute;
+  transition: var(--transition-smooth);
+}
+
+.theme-toggle .sun-icon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0);
+}
+
+.theme-toggle .moon-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+body.light-mode .theme-toggle .sun-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+body.light-mode .theme-toggle .moon-icon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0);
 }
 
 .nav-toggle {

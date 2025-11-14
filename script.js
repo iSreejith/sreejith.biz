@@ -4,7 +4,28 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // --- 1. Mobile Navigation Toggle ---
+  // --- 1. Theme Toggle (Dark/Light Mode) ---
+  const themeToggle = document.getElementById("themeToggle");
+  const body = document.body;
+
+  // Check for saved theme preference or default to dark mode
+  const currentTheme = localStorage.getItem("theme") || "dark";
+  if (currentTheme === "light") {
+    body.classList.add("light-mode");
+  }
+
+  // Toggle theme on button click
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("light-mode");
+
+      // Save theme preference
+      const theme = body.classList.contains("light-mode") ? "light" : "dark";
+      localStorage.setItem("theme", theme);
+    });
+  }
+
+  // --- 2. Mobile Navigation Toggle ---
   const navToggle = document.getElementById("nav-toggle");
   const navMenu = document.getElementById("nav-menu");
   const navLinks = document.querySelectorAll(".nav-link");
@@ -148,4 +169,3 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- 9. Log initialization (can be removed in production) ---
   console.log("Portfolio website initialized successfully!");
 });
-
