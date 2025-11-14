@@ -7,11 +7,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- 1. Theme Toggle (Dark/Light Mode) ---
   const themeToggle = document.getElementById("themeToggle");
   const body = document.body;
+  const heroImage = document.querySelector(".hero-image img");
+
+  // Function to update the profile image based on theme
+  function updateProfileImage(theme) {
+    if (heroImage) {
+      if (theme === "light") {
+        heroImage.src = "sreejith-w.png";
+      } else {
+        heroImage.src = "sreejith.png";
+      }
+    }
+  }
 
   // Check for saved theme preference or default to dark mode
   const currentTheme = localStorage.getItem("theme") || "dark";
   if (currentTheme === "light") {
     body.classList.add("light-mode");
+    updateProfileImage("light");
   }
 
   // Toggle theme on button click
@@ -22,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Save theme preference
       const theme = body.classList.contains("light-mode") ? "light" : "dark";
       localStorage.setItem("theme", theme);
+
+      // Update profile image
+      updateProfileImage(theme);
     });
   }
 
