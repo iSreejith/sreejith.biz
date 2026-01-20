@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Friendly Friends</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          #fffff0 0%,
+          #f5f5f5 50%,
+          #fafafa 100%
+        );
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 60px;
+        padding: 80px 40px 40px;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        overflow-x: hidden;
+      }
+      .character {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        --scale: 1;
+        --face-color: #9e9e9e;
+        --body-color: #757575;
+        --cheek-color: #bdbdbd;
+        transition: transform 0.3s ease;
+      }
+      .character:hover {
+        transform: scale(1.05) translateY(-5px);
+      }
+      .face {
+        width: calc(120px * var(--scale));
+        height: calc(130px * var(--scale));
+        background: var(--face-color);
+        border-radius: 50% 50% 50% 50%;
+        position: relative;
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.15),
+          inset 0 -5px 20px rgba(255, 255, 255, 0.3);
+        transition: transform 0.15s ease-out;
+        transform-style: preserve-3d;
+      }
+      /* Rosy cheeks */
+      .face::before,
+      .face::after {
+        content: "";
+        position: absolute;
+        width: calc(22px * var(--scale));
+        height: calc(14px * var(--scale));
+        background: var(--cheek-color);
+        border-radius: 50%;
+        top: calc(55px * var(--scale));
+        opacity: 0.7;
+        filter: blur(2px);
+      }
+      .face::before {
+        left: calc(8px * var(--scale));
+      }
+      .face::after {
+        right: calc(8px * var(--scale));
+      }
+      /* Eyebrows */
+      .eyebrow {
+        position: absolute;
+        width: calc(20px * var(--scale));
+        height: calc(6px * var(--scale));
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        top: calc(22px * var(--scale));
+      }
+      .eyebrow.left {
+        left: calc(22px * var(--scale));
+        transform: rotate(-10deg);
+      }
+      .eyebrow.right {
+        right: calc(22px * var(--scale));
+        transform: rotate(10deg);
+      }
+      .eyes {
+        display: flex;
+        justify-content: center;
+        gap: calc(24px * var(--scale));
+        position: absolute;
+        top: calc(32px * var(--scale));
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .eye {
+        width: calc(38px * var(--scale));
+        height: calc(38px * var(--scale));
+        background: #fff;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      /* Eyelashes */
+      .eye::before {
+        content: "";
+        position: absolute;
+        top: calc(-3px * var(--scale));
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(30px * var(--scale));
+        height: calc(8px * var(--scale));
+        border-top: calc(3px * var(--scale)) solid rgba(0, 0, 0, 0.4);
+        border-radius: 50% 50% 0 0;
+      }
+      .pupil {
+        width: calc(18px * var(--scale));
+        height: calc(18px * var(--scale));
+        background: radial-gradient(circle at 30% 30%, #555, #222);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.1s ease-out;
+      }
+      .pupil::after {
+        content: "";
+        width: calc(6px * var(--scale));
+        height: calc(6px * var(--scale));
+        background: #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+      }
+      /* Big friendly smile */
+      .mouth {
+        width: calc(40px * var(--scale));
+        height: calc(22px * var(--scale));
+        background: #616161;
+        border-radius: 0 0 50px 50px;
+        position: absolute;
+        bottom: calc(22px * var(--scale));
+        left: 50%;
+        transform: translateX(-50%);
+        overflow: hidden;
+        box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.3);
+      }
+      /* Tongue */
+      .mouth::after {
+        content: "";
+        width: calc(20px * var(--scale));
+        height: calc(15px * var(--scale));
+        background: #888888;
+        border-radius: 50%;
+        position: absolute;
+        bottom: calc(-5px * var(--scale));
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .body {
+        width: calc(85px * var(--scale));
+        height: calc(65px * var(--scale));
+        background: var(--body-color);
+        border-radius: 0 0 45px 45px;
+        margin-top: -5px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+      }
+      /* Little arms */
+      .body::before,
+      .body::after {
+        content: "";
+        position: absolute;
+        width: calc(15px * var(--scale));
+        height: calc(35px * var(--scale));
+        background: var(--body-color);
+        border-radius: 20px;
+        top: calc(5px * var(--scale));
+      }
+      .body::before {
+        left: calc(-12px * var(--scale));
+        transform: rotate(15deg);
+      }
+      .body::after {
+        right: calc(-12px * var(--scale));
+        transform: rotate(-15deg);
+      }
+      /* Different sizes for each character */
+      .character:nth-child(1) {
+        --scale: 0.7;
+      }
+      .character:nth-child(2) {
+        --scale: 1.3;
+      }
+      .character:nth-child(3) {
+        --scale: 0.9;
+      }
+      .character:nth-child(4) {
+        --scale: 1.5;
+      }
+      .character:nth-child(5) {
+        --scale: 0.8;
+      }
+      .character:nth-child(6) {
+        --scale: 1.1;
+      }
+      /* Grey monochrome palette for each character */
+      .character:nth-child(1) {
+        --face-color: #a0a0a0;
+        --body-color: #707070;
+        --cheek-color: #c0c0c0;
+      }
+      .character:nth-child(2) {
+        --face-color: #888888;
+        --body-color: #5a5a5a;
+        --cheek-color: #aaaaaa;
+      }
+      .character:nth-child(3) {
+        --face-color: #b8b8b8;
+        --body-color: #808080;
+        --cheek-color: #d0d0d0;
+      }
+      .character:nth-child(4) {
+        --face-color: #909090;
+        --body-color: #606060;
+        --cheek-color: #b0b0b0;
+      }
+      .character:nth-child(5) {
+        --face-color: #a8a8a8;
+        --body-color: #787878;
+        --cheek-color: #c8c8c8;
+      }
+      .character:nth-child(6) {
+        --face-color: #989898;
+        --body-color: #686868;
+        --cheek-color: #b8b8b8;
+      }
+      h1 {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #666;
+        font-size: 1.8rem;
+        text-align: center;
+        z-index: 10;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      /* Enhanced mouse trail styles */
+      .trail-dot {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1000;
+        animation: sparkle 1s ease-out forwards;
+      }
+      .trail-dot.circle {
+        border-radius: 50%;
+        box-shadow:
+          0 0 10px currentColor,
+          0 0 20px currentColor;
+      }
+      .trail-dot.star {
+        background: transparent !important;
+        font-size: 20px;
+        animation: sparkleStar 1s ease-out forwards;
+      }
+      .trail-dot.sparkle {
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px currentColor,
+          0 0 30px currentColor,
+          0 0 45px currentColor;
+      }
+      @keyframes sparkle {
+        0% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.2) rotate(180deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0) rotate(360deg);
+        }
+      }
+      @keyframes sparkleStar {
+        0% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.5) rotate(180deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.5) rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🌟 Hello! 🌟</h1>
+    <div class="character">
+      <div class="face">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+    </div>
+    <div class="character">
+      <div class="face">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+    </div>
+    <div class="character">
+      <div class="face">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+    </div>
+    <div class="character">
+      <div class="face">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+    </div>
+    <div class="character">
+      <div class="face">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+    </div>
+    <div class="character">
+      <div class="face">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+    </div>
+    <script>
+      // Vibrant rainbow trail colors
+      const trailColors = [
+        "#FF6B8A", // Pink
+        "#FFB347", // Orange
+        "#FFEB3B", // Yellow
+        "#7DC9A0", // Green
+        "#64B5F6", // Blue
+        "#BA68C8", // Purple
+        "#FF8A80", // Coral
+        "#80DEEA", // Cyan
+      ];
+
+      // Sparkle emoji options
+      const sparkles = ["✨", "⭐", "💫", "🌟", "✧", "★"];
+
+      // Mouse trail effect
+      let lastTrailTime = 0;
+      const trailInterval = 20; // Faster trail for more particles
+
+      function createTrailDot(x, y) {
+        // Create multiple particles per movement for density
+        const particleCount = Math.random() > 0.7 ? 3 : 2;
+
+        for (let i = 0; i < particleCount; i++) {
+          const dot = document.createElement("div");
+
+          // Random offset for spread effect
+          const offsetX = (Math.random() - 0.5) * 30;
+          const offsetY = (Math.random() - 0.5) * 30;
+
+          // Decide between circle, sparkle glow, or star
+          const type = Math.random();
+          if (type < 0.6) {
+            // Glowing circle
+            dot.className = "trail-dot circle";
+            const size = Math.random() * 18 + 10;
+            dot.style.width = size + "px";
+            dot.style.height = size + "px";
+            const color =
+              trailColors[Math.floor(Math.random() * trailColors.length)];
+            dot.style.backgroundColor = color;
+            dot.style.color = color;
+          } else if (type < 0.85) {
+            // Sparkle with extra glow
+            dot.className = "trail-dot sparkle";
+            const size = Math.random() * 14 + 8;
+            dot.style.width = size + "px";
+            dot.style.height = size + "px";
+            const color =
+              trailColors[Math.floor(Math.random() * trailColors.length)];
+            dot.style.backgroundColor = color;
+            dot.style.color = color;
+          } else {
+            // Star emoji
+            dot.className = "trail-dot star";
+            dot.textContent =
+              sparkles[Math.floor(Math.random() * sparkles.length)];
+          }
+
+          // Position with offset
+          dot.style.left = x + offsetX + "px";
+          dot.style.top = y + offsetY + "px";
+
+          document.body.appendChild(dot);
+
+          // Remove after animation
+          setTimeout(() => {
+            dot.remove();
+          }, 1000);
+        }
+      }
+
+      document.addEventListener("mousemove", (e) => {
+        // Head rotation tracking
+        const faces = document.querySelectorAll(".face");
+        faces.forEach((face) => {
+          const rect = face.getBoundingClientRect();
+          const faceCenterX = rect.left + rect.width / 2;
+          const faceCenterY = rect.top + rect.height / 2;
+
+          // Calculate angle and distance from face center to mouse
+          const deltaX = e.clientX - faceCenterX;
+          const deltaY = e.clientY - faceCenterY;
+          const distance = Math.hypot(deltaX, deltaY);
+
+          // Max rotation angles (degrees)
+          const maxRotateX = 15;
+          const maxRotateY = 20;
+
+          // Calculate rotation based on mouse position relative to face
+          // Closer mouse = less rotation needed, farther = more dramatic look
+          const rotateY = (deltaX / window.innerWidth) * maxRotateY * 2;
+          const rotateX = -(deltaY / window.innerHeight) * maxRotateX * 2;
+
+          // Apply subtle tilt toward mouse
+          face.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // Eye/pupil tracking
+        const eyes = document.querySelectorAll(".eye");
+        eyes.forEach((eye) => {
+          const rect = eye.getBoundingClientRect();
+          const eyeCenterX = rect.left + rect.width / 2;
+          const eyeCenterY = rect.top + rect.height / 2;
+          const angle = Math.atan2(
+            e.clientY - eyeCenterY,
+            e.clientX - eyeCenterX,
+          );
+          // Scale the max distance based on eye size
+          const eyeScale = rect.width / 38;
+          const maxDistance = 8 * eyeScale;
+          const distance = Math.min(
+            maxDistance,
+            Math.hypot(e.clientX - eyeCenterX, e.clientY - eyeCenterY) / 15,
+          );
+          const pupil = eye.querySelector(".pupil");
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+          pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        });
+
+        // Mouse trail with particles
+        const currentTime = Date.now();
+        if (currentTime - lastTrailTime > trailInterval) {
+          createTrailDot(e.clientX, e.clientY);
+          lastTrailTime = currentTime;
+        }
+      });
+    </script>
+  </body>
+</html>
